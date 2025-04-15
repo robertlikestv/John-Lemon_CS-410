@@ -13,6 +13,8 @@ public class GargoyleBehaviour : MonoBehaviour
     private float startRotation;
 
     private float timeInSight = 0;
+    public AudioSource alertedAudio;
+    bool m_HasAudioPlayed;
 
 
 
@@ -26,6 +28,11 @@ public class GargoyleBehaviour : MonoBehaviour
 
         if(distance <= playerSuspicionDistance)
         {
+            if (!m_HasAudioPlayed)
+            {
+                alertedAudio.Play();
+                m_HasAudioPlayed = true;
+            }
             timeInSight += Time.deltaTime;
             float actualRotate = Mathf.Lerp(0, rotateSpeed, 0.1f * timeInSight);
             transform.Rotate(new Vector3 (0, actualRotate, 0) * Time.deltaTime);
@@ -37,7 +44,7 @@ public class GargoyleBehaviour : MonoBehaviour
         }
         else{
             timeInSight = 0;
-
+            m_HasAudioPlayed = false;
         }
 
 
