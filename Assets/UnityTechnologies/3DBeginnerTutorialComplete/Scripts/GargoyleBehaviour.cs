@@ -4,38 +4,36 @@ public class GargoyleBehaviour : MonoBehaviour
 {
     public float angleWidth;
 
+    public float rotateSpeed;
+
     public float playerSuspicionDistance;
 
     public Transform player;
 
-    private float lerpSpeed = 0.1f;
-    private float leftRotateBound;
-    private  float rightRotateBound;
+    private float startRotation;
+
+
 
     void Start ()
     {
-            float leftRotateBound = -angleWidth/2;
-
-            float rightRotateBound = angleWidth/2;
+        startRotation = transform.eulerAngles.y;
     }
     void Update ()
     {
         float distance = Vector3.Distance(transform.position, player.position);
 
-        float lerping = 0;
-        while(distance <= playerSuspicionDistance)
+        if(distance <= playerSuspicionDistance)
         {
-            if (lerping >= 1 || lerping <= 0)
-            {
-                lerpSpeed *= -1;
+
+            transform.Rotate(new Vector3 (0, rotateSpeed, 0) * Time.deltaTime);
+
+            if (Mathf.Abs(transform.eulerAngles.y - startRotation) >= angleWidth/2){
+                rotateSpeed *= -1;
             }
 
-            lerping += lerpSpeed;
-            
-            float rotationValue = Mathf.Lerp(leftRotateBound, rightRotateBound, lerping);
-
-            transform.Rotate(new Vector3 (0, rotationValue, 0) * Time.deltaTime);
         }
+
+
 
 
     }
