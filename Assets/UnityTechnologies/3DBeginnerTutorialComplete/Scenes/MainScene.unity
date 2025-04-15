@@ -2776,8 +2776,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb96df24845624c87a02e08feb5be3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angleWidth: 45
-  playerSuspicionDistance: 10
+  angleWidth: 60
+  rotateSpeed: 100
+  playerSuspicionDistance: 7
   player: {fileID: 2008973354732098957}
 --- !u!4 &6925745739663848697 stripped
 Transform:
