@@ -28,27 +28,34 @@ public class GargoyleBehaviour : MonoBehaviour
 
         if(distance <= playerSuspicionDistance)
         {
-            if (!m_HasAudioPlayed)
+            //player is in eyesight and in range
+            Vector3 vectorDirection = player.position - transform.position + Vector3.up;
+            Ray ray = new Ray(transform.position, vectorDirection);
+            RaycastHit raycastHit;
+            
+            if (Physics.Raycast (ray, out raycastHit, distance))
             {
-                alertedAudio.Play();
-                m_HasAudioPlayed = true;
+                if (raycastHit.collider.transform == player)
+                {
+                    if (!m_HasAudioPlayed)
+                    {
+                        alertedAudio.Play();
+                        m_HasAudioPlayed = true;
+                    }
+                    timeInSight += Time.deltaTime;
+                    float actualRotate = Mathf.Lerp(0, rotateSpeed, 0.1f * timeInSight);
+                    transform.Rotate(new Vector3 (0, actualRotate, 0) * Time.deltaTime);
+
+                    if (Mathf.Abs(transform.eulerAngles.y - startRotation) >= angleWidth/2)
+                    {
+                        rotateSpeed *= -1;
+                    }
+                }
             }
-            timeInSight += Time.deltaTime;
-            float actualRotate = Mathf.Lerp(0, rotateSpeed, 0.1f * timeInSight);
-            transform.Rotate(new Vector3 (0, actualRotate, 0) * Time.deltaTime);
-
-            if (Mathf.Abs(transform.eulerAngles.y - startRotation) >= angleWidth/2){
-                rotateSpeed *= -1;
-            }
-
+            else{
+                timeInSight = 0;
+                m_HasAudioPlayed = false;
+            }   
         }
-        else{
-            timeInSight = 0;
-            m_HasAudioPlayed = false;
-        }
-
-
-
-
     }
 }
