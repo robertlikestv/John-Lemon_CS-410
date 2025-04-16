@@ -28,15 +28,21 @@ public class GargoyleBehaviour : MonoBehaviour
 
         if(distance <= playerSuspicionDistance)
         {
+            Debug.Log("in distance");
             //player is in eyesight and in range
-            Vector3 vectorDirection = player.position - transform.position + Vector3.up;
-            Ray ray = new Ray(transform.position, vectorDirection);
+
+            Vector3 eyes = transform.position + Vector3.up;
+            Vector3 playerPos = player.position + Vector3.up;
+            Vector3 vectorDirection = playerPos - eyes;
+            //Ray ray = new Ray(transform.position, vectorDirection);
             RaycastHit raycastHit;
             
-            if (Physics.Raycast (ray, out raycastHit, distance))
+            if (Physics.Raycast (transform.position, vectorDirection, out raycastHit, distance + 1))
             {
-                if (raycastHit.collider.transform == player)
+                                    Debug.Log("Ray Cast hit");
+                if (raycastHit.collider.transform == player.transform)
                 {
+                    Debug.Log("in sight");
                     if (!m_HasAudioPlayed)
                     {
                         alertedAudio.Play();
@@ -51,11 +57,19 @@ public class GargoyleBehaviour : MonoBehaviour
                         rotateSpeed *= -1;
                     }
                 }
-            }
-            else{
+                else
+                {
+                Debug.Log("out of sight");
+
                 timeInSight = 0;
                 m_HasAudioPlayed = false;
             }   
+            }
+
+        }
+        else{
+            timeInSight = 0;
+            m_HasAudioPlayed = false;
         }
     }
 }
